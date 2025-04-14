@@ -68,7 +68,7 @@ jobs:
       - name: Run Tests
         run: npm run test -- --ci
 
-uild:
+build:
     name: Build Frontend Docker Image
     runs-on: ubuntu-latest
     needs:
