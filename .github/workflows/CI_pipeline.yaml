@@ -1,9 +1,9 @@
-name: ci-workflow
+name: frontend-ci
 
 # Ensure the workflow runs manually and on pull request to the main branch
 on:
   workflow_dispatch:
-  pull-request:
+  pull_request:
     branches:
       - master
     paths:
@@ -25,6 +25,14 @@ jobs:
         with:
           node-version: '18'
 
+      - name: cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
 
@@ -45,12 +53,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+      
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run Tests
-        run: npm test -- --ci
+        run: npm run test -- --ci
 
 uild:
     name: Build Frontend Docker Image
